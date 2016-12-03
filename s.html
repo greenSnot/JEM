@@ -4,6 +4,19 @@ function is_numeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+function show_matrix(m, title) {
+  html = '<div>' + (title || 'Matrix') + ':</div>';
+  for (var i = 0; i < m.rows; ++i) {
+    html += '<div>';
+    for (var j = 0; j < m.cols; ++j) {
+      html += '<button>' + m[i][j] + '</button>';
+    }
+    html += '</div>';
+  }
+  document.body.innerHTML+=html;
+}
+
+
 function matrix(t) {
   function res(m) {
     var self = arguments.callee;
@@ -19,6 +32,7 @@ function matrix(t) {
       multiply_res[r] = [];
     }
 
+    // multiply matrix
     for (var r = 0; r < rows_l; ++r) {
       for (var c = 0; c < cols_r; ++c) {
         multiply_res[r][c] = 0;
@@ -45,31 +59,22 @@ a = matrix([
   [2, 3, 1],
   [1, 2, 5],
 ]);
+show_matrix(a, 'a');
 
 b = matrix([
   [3, 2],
   [2, 6],
   [2, 6],
 ]);
+show_matrix(b, 'b');
 
 c = matrix([
   [6, 2, 5],
   [1, 6, 9],
 ]);
+show_matrix(c, 'c');
 
-function show_matrix(m) {
-  html = '<div>Matrix:</div>';
-  for (var i = 0; i < m.rows; ++i) {
-    html += '<div>';
-    for (var j = 0; j < m.cols; ++j) {
-      html += '<button>' + m[i][j] + '</button>';
-    }
-    html += '</div>';
-  }
-  document.body.innerHTML+=html;
-}
-
-show_matrix(c(a)(b));
-show_matrix(c(a(b)));
+show_matrix((c(a))(b), '(c * a) * b');
+show_matrix(c(a(b)), 'c * (a * b)');
 
 </script>
