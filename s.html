@@ -1,0 +1,56 @@
+<script>
+function matrix(t) {
+  function res(m) {
+    var self = arguments.callee;
+    //rows_left
+    var rows_l = self.rows || self.length || 0;
+    var cols_l = self.cols || (self[0] ? self[0].length : 0);
+    //rows_right
+    var rows_r = m.rows || m.length || 0;
+    var cols_r = m.cols || m[0] ? m[0].length : 0;
+
+    var multiply_res = [];
+    for (var r = 0; r < rows_l; ++r) {
+      multiply_res[r] = [];
+    }
+
+    for (var r = 0; r < rows_l; ++r) {
+      for (var c = 0; c < cols_r; ++c) {
+        multiply_res[r][c] = 0;
+        for (var c_ = 0; c_ < cols_l; ++c_) {
+          for (var r_ = 0; r_ < rows_r; ++r_) {
+            multiply_res[r][c] += self[r][c_] * m[r_][c];
+          }
+        }
+      }
+    }
+
+    return new matrix(multiply_res);
+  }
+
+  for (var i = 0;i < t.length; ++i) {
+    res[i] = t[i];
+  }
+  res.rows = t.length;
+  res.cols = t[0].length;
+
+  return res;
+}
+
+a = matrix([
+  [1, 2],
+  [2, 3]
+]);
+
+b = matrix([
+  [3, 2],
+  [2, 6],
+]);
+
+c = matrix([
+  [6, 2],
+  [1, 6],
+]);
+console.log(c(a(b))[0]);
+console.log(c(a)(b)[0]);
+</script>
