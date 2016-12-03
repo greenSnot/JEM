@@ -1,13 +1,18 @@
+<body></body>
 <script>
+function is_numeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 function matrix(t) {
   function res(m) {
     var self = arguments.callee;
     //rows_left
     var rows_l = self.rows || self.length || 0;
-    var cols_l = self.cols || (self[0] ? self[0].length : 0);
+    var cols_l = self.cols || (is_numeric(self[0]) ? 1: (isArray(self[0]) ? self[0].length : 0));
     //rows_right
     var rows_r = m.rows || m.length || 0;
-    var cols_r = m.cols || m[0] ? m[0].length : 0;
+    var cols_r = m.cols || (is_numeric(m[0]) ? 1: (isArray(m[0]) ? m[0].length : 0));
 
     var multiply_res = [];
     for (var r = 0; r < rows_l; ++r) {
@@ -17,10 +22,8 @@ function matrix(t) {
     for (var r = 0; r < rows_l; ++r) {
       for (var c = 0; c < cols_r; ++c) {
         multiply_res[r][c] = 0;
-        for (var c_ = 0; c_ < cols_l; ++c_) {
-          for (var r_ = 0; r_ < rows_r; ++r_) {
-            multiply_res[r][c] += self[r][c_] * m[r_][c];
-          }
+        for (var r_ = 0; r_ < rows_r; ++r_) {
+          multiply_res[r][c] += self[r][r_] * m[r_][c];
         }
       }
     }
@@ -38,19 +41,35 @@ function matrix(t) {
 }
 
 a = matrix([
-  [1, 2],
-  [2, 3]
+  [1, 2, 5],
+  [2, 3, 1],
+  [1, 2, 5],
 ]);
 
 b = matrix([
   [3, 2],
   [2, 6],
+  [2, 6],
 ]);
 
 c = matrix([
-  [6, 2],
-  [1, 6],
+  [6, 2, 5],
+  [1, 6, 9],
 ]);
-console.log(c(a(b))[0]);
-console.log(c(a)(b)[0]);
+
+function show_matrix(m) {
+  html = '<div>Matrix:</div>';
+  for (var i = 0; i < m.rows; ++i) {
+    html += '<div>';
+    for (var j = 0; j < m.cols; ++j) {
+      html += '<button>' + m[i][j] + '</button>';
+    }
+    html += '</div>';
+  }
+  document.body.innerHTML+=html;
+}
+
+show_matrix(c(a)(b));
+show_matrix(c(a(b)));
+
 </script>
